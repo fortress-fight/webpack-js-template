@@ -2,7 +2,7 @@
  * @Description: 对 webpack 补充信息
  * @Author: F-Stone
  * @Date: 2021-12-02 15:02:38
- * @LastEditTime: 2021-12-02 17:07:32
+ * @LastEditTime: 2021-12-06 18:21:47
  * @LastEditors: F-Stone
 -->
 
@@ -13,7 +13,13 @@
 1.  `webpack-build-notifier`
     在打包结束后发动系统通知
 2.  `friendly-errors-webpack-plugin`
-    优化打包时的输出信息
+    优化打包时的输出信息，此时可以将 webpack 的输出关闭
+
+    ```js
+    // webpack.config.js
+    // preset: minimal
+    {stats: { preset: "none", colors: true },}
+    ```
 
 ## 优化
 
@@ -89,6 +95,10 @@ module.exports = {
     module: {
         rules: [
             {
+                test: require.resolve("./src/globals.js"),
+                use: "exports-loader?type=commonjs&exports=file,multiple|helpers.parse|parse",
+            },
+            {
                 test: require.resolve("jquery"),
                 loader: "expose-loader",
                 options: {
@@ -116,3 +126,84 @@ module.exports = {
     },
 };
 ```
+
+或者使用行间引入方式
+`'exports-loader?type=commonjs&exports=file,multiple|helpers.parse|parse',`
+
+## imports-loader
+
+在某些项目中存在，this 的指定 window ，当模块运行在 CommonJS 上下文中，这将会变成一个问题。 我们可以通过 `imports-loader` 中指定 this
+
+示例：
+
+```javascript
+// webpack.config.js
+{
+    module: {
+        rules: [
+            {
+                test: require.resolve('./src/index.js'),
+                use: 'imports-loader?wrapper=window',
+            },
+        ],
+    },
+}
+```
+
+## require.context
+
+语法：
+
+```javascript
+// mode: sync | lazy
+require.context(
+    directory,
+    (useSubdirectories = true),
+    (regExp = /^\.\/.*$/),
+    (mode = "sync")
+);
+```
+
+示例：`require.context('./test', false, /\.test\.js$/);`
+
+完整示例：
+
+```javascript
+// 同步行为
+const context = require.context("locales", true, /\.json$/);
+context.keys().forEach((fillName) => {
+    try {
+        const component = context(fillName);
+        // do something with locale
+    } catch (error) {
+        console.error(error);
+    }
+});
+```
+
+```js
+var context = require.context('locales', true, /\.json$/, 'lazy');
+context.keys().forEach((fillName) => {
+    context(fillName).then((locale) => {
+        // do something with locale
+    }).catch (error) {
+        console.error(error);
+    }
+});
+```
+
+## [Web Workers](https://webpack.docschina.org/guides/web-workers/)
+
+从 webpack 5 开始，你可以使用 Web Workers 代替 worker-loader。
+
+## [gulp](https://webpack.docschina.org/guides/integrations/#gulp)
+
+## [每个入口使用多种文件类型](https://webpack.docschina.org/guides/entry-advanced/)
+
+每个入口使用多种文件类型，可以实现将 CSS 和 JavaScript（和其他）文件分离在不同的 bundle。
+
+## 需要进一步了解的内容
+
+1.  [开发 - Vagrant](https://webpack.docschina.org/guides/development-vagrant/)
+
+    使用虚拟机开发环境配合 Nginx 实现对线上环境的模拟开发
