@@ -2,7 +2,7 @@
  * @Description: eslint setting
  * @Author: F-Stone
  * @Date: 2021-12-06 23:59:59
- * @LastEditTime: 2021-12-07 01:37:19
+ * @LastEditTime: 2022-02-11 22:10:27
  * @LastEditors: F-Stone
  */
 
@@ -20,6 +20,7 @@ module.exports = {
     },
     extends: ["eslint:recommended", "plugin:prettier/recommended"],
     rules: {
+        "prefer-const": "error",
         "prettier/prettier": ["error", { endOfLine: "auto" }],
         "no-console": "off",
         "no-debugger": "off",

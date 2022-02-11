@@ -2,7 +2,7 @@
  * @Description: style config
  * @Author: F-Stone
  * @Date: 2021-12-07 10:20:17
- * @LastEditTime: 2021-12-08 01:40:23
+ * @LastEditTime: 2022-02-11 22:28:40
  * @LastEditors: F-Stone
  */
 
@@ -30,6 +30,10 @@ module.exports = {
         "scss/dollar-variable-pattern": "^[a-z][a-z0-9\\-_]*[a-z0-9]$",
         "at-rule-empty-line-before": "always",
         "rule-empty-line-before": "never",
+        "selector-no-qualifying-type": [
+            true,
+            { ignore: ["attribute", "class", "id"] },
+        ],
         "block-closing-brace-empty-line-before": [
             "never",
             { except: ["after-closing-brace"] },

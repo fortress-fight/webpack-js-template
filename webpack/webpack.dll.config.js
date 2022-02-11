@@ -2,7 +2,7 @@
  * @Description: webpack dll 打包配置
  * @Author: F-Stone
  * @Date: 2021-12-01 15:01:02
- * @LastEditTime: 2021-12-06 17:25:32
+ * @LastEditTime: 2022-02-11 22:27:45
  * @LastEditors: F-Stone
  */
 const path = require("path");
@@ -14,10 +14,10 @@ const {
     PUBLIC_PATH,
     OUT_FILE_PATH,
 } = require("./config/webpack.path");
-const { WEBPACK_DLL_PLUGINS } = require("./plugins/webpack-plugin-entry");
+const { WEBPACK_DLL_PLUGIN } = require("./plugins/webpack-dll-plugin");
 const { WEBPACK_DLL_RULES } = require("./rules/webpack-rule-entry");
 
-module.exports = (env, argv) => {
+module.exports = () => {
     return {
         mode: "production",
         entry: { vendor: ["lodash"] },
@@ -31,7 +31,7 @@ module.exports = (env, argv) => {
             library: DLL_NAME_RULE,
         },
         devtool: false,
-        plugins: WEBPACK_DLL_PLUGINS,
+        plugins: WEBPACK_DLL_PLUGIN,
         module: { rules: WEBPACK_DLL_RULES },
         optimization: {
             moduleIds: "deterministic",
